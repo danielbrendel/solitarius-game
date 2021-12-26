@@ -11,30 +11,21 @@
 	Released under the MIT license
 */
 
-/* Asteroid entity */
-class CAsteroidEntity : IScriptedEntity
+/* Vortex entity */
+class CVortexEntity : IScriptedEntity
 {
 	Vector m_vecPos;
     float m_fRotation;
 	Vector m_vecSize;
 	Model m_oModel;
 	SpriteHandle m_hSprite;
-    string m_szSprite;
     float m_fTurnSpeed;
     Timer m_tmrTurn;
     size_t m_uiTurnTimer;
-    Timer m_tmrHit;
-    SoundHandle m_hHit;
 	
-	CAsteroidEntity()
+	CVortexEntity()
     {
 		this.m_vecSize = Vector(64, 64);
-    }
-
-    //Set sprite
-    void SetSprite(const string &in szSprite)
-    {
-        this.m_szSprite = szSprite;
     }
 
     //Set size
@@ -60,14 +51,10 @@ class CAsteroidEntity : IScriptedEntity
 	{
 		this.m_vecPos = vec;
         this.m_fRotation = 0.0f;
-		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\" + this.m_szSprite, 1, this.m_vecSize[0], this.m_vecSize[1], 1, false);
-        this.m_hHit = S_QuerySound(GetPackagePath() + "sound\\asthit.wav");
+		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\vortex.jpg", 1, this.m_vecSize[0], this.m_vecSize[1], 1, true);
 		this.m_tmrTurn.SetDelay(this.m_uiTurnTimer);
 		this.m_tmrTurn.Reset();
 		this.m_tmrTurn.SetActive(true);
-        this.m_tmrHit.SetDelay(2000);
-        this.m_tmrHit.Reset();
-        this.m_tmrHit.SetActive(true);
         BoundingBox bbox;
         bbox.Alloc();
         bbox.AddBBoxItem(Vector(0, 0), this.m_vecSize);
@@ -88,13 +75,6 @@ class CAsteroidEntity : IScriptedEntity
             this.m_tmrTurn.Reset();
 
             this.m_fRotation += this.m_fTurnSpeed;
-        }
-
-        if (this.m_tmrHit.IsActive()) {
-            this.m_tmrHit.Update();
-            if (this.m_tmrHit.IsElapsed()) {
-                this.m_tmrHit.SetActive(false);
-            }
         }
 	}
 	
@@ -124,7 +104,7 @@ class CAsteroidEntity : IScriptedEntity
 	//Indicate if entity can be collided
 	bool IsCollidable()
 	{
-		return true;
+		return false;
 	}
 	
 	//Called when the entity recieves damage
@@ -140,16 +120,6 @@ class CAsteroidEntity : IScriptedEntity
 	//Called for entity collisions
 	void OnCollided(IScriptedEntity@ ref)
 	{
-        if (!this.m_tmrHit.IsActive()) {
-            S_PlaySound(this.m_hHit, S_GetCurrentVolume());
-
-            this.m_tmrHit.Reset();
-            this.m_tmrHit.SetActive(true);
-        }
-
-        if (ref.GetName() == "player") {
-            ref.OnDamage(3);
-        }
 	}
 	
 	//Called for accessing the model data for this entity.
@@ -185,7 +155,7 @@ class CAsteroidEntity : IScriptedEntity
 	//Return a name string here, e.g. the class name or instance name. 
 	string GetName()
 	{
-		return "asteroid";
+		return "vortex";
 	}
 	
 	//This vector is used for drawing the selection box
@@ -206,8 +176,7 @@ class CAsteroidEntity : IScriptedEntity
 //Create the associated entity here
 void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent, const string &in szPath, const string &in szProps)
 {
-	CAsteroidEntity@ ent = CAsteroidEntity();
-    ent.SetSprite(Props_ExtractValue(szProps, "sprite"));
+	CVortexEntity@ ent = CVortexEntity();
     ent.SetSize(Vector(parseInt(Props_ExtractValue(szProps, "sizex")), parseInt(Props_ExtractValue(szProps, "sizey"))));
     ent.SetTurnSpeed(parseFloat(Props_ExtractValue(szProps, "tspeed")));
     ent.SetTimerDelay(parseInt(Props_ExtractValue(szProps, "delay")));

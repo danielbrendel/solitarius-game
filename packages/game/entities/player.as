@@ -14,6 +14,9 @@
 string g_szPackagePath = "";
 
 #include "explosion.as"
+#include "weapon_gun.as"
+#include "weapon_laser.as"
+#include "weapon_missile.as"
 
 const int PLAYER_SPEED = 250;
 const int BTN_FORWARD = (1 << 0);
@@ -26,9 +29,9 @@ const int BTN_SPEED = (1 << 6);
 const int BTN_ATTACK = (1 << 7);
 const int BTN_THROW = (1 << 8);
 const int BTN_DODGE = (1 << 9);
-const int WEAPON_HANDGUN = 1;
-const int WEAPON_RIFLE = 2;
-const int WEAPON_SHOTGUN = 3;
+const int WEAPON_GUN = 1;
+const int WEAPON_LASER = 2;
+const int WEAPON_MISSILE = 3;
 const uint GAME_COUNTER_MAX = 5;
 /* Player entity manager */
 class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
@@ -72,7 +75,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		this.m_uiFlickerCount = 0;
 		this.m_bMoving = false;
 		this.m_bShooting = false;
-		this.m_iCurrentWeapon = WEAPON_HANDGUN;
+		this.m_iCurrentWeapon = WEAPON_GUN;
 		this.m_bMayThrow = true;
 		this.m_iScore = 0;
 		this.m_uiDodgeCounter = 0;
@@ -255,8 +258,8 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 				vecBulletPos[0] -= int(sin(this.GetRotation() + 80.0) * 20);
 				vecBulletPos[1] += int(cos(this.GetRotation() + 80.0) * 20);
 				
-				/*if (this.m_iCurrentWeapon == WEAPON_HANDGUN) {
-					if (HUD_GetAmmoItemCurrent("handgun") > 0) {
+				if (this.m_iCurrentWeapon == WEAPON_GUN) {
+					if (HUD_GetAmmoItemCurrent("gun") > 0) {
 						CGunEntity @gun = CGunEntity();
 						
 						gun.SetRotation(this.GetRotation());
@@ -264,56 +267,48 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 						
 						Ent_SpawnEntity("weapon_gun", @gun, vecBulletPos);
 						
-						HUD_UpdateAmmoItem("handgun", HUD_GetAmmoItemCurrent("handgun") - 1, HUD_GetAmmoItemMax("handgun"));
+						HUD_UpdateAmmoItem("gun", HUD_GetAmmoItemCurrent("gun") - 1, HUD_GetAmmoItemMax("gun"));
 						
-						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\handgun.wav");
+						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\gun.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
-
-						this.m_tmrShowFlare.Reset();
-						this.m_tmrShowFlare.SetActive(true);
 					}
-				} else if (this.m_iCurrentWeapon == WEAPON_RIFLE) {
+				} else if (this.m_iCurrentWeapon == WEAPON_LASER) {
 					if (HUD_GetAmmoItemCurrent("laser") > 0) {
-						CLaserEntity @laser = CLaserEntity();
+						for (int i = 0; i < 3; i++) {
+							CLaserEntity @laser = CLaserEntity();
 
-						laser.SetRotation(this.GetRotation());
-						laser.SetOwner(@this);
-						
-						Ent_SpawnEntity("weapon_laser", @laser, vecBulletPos);
+							float fGunRot = this.GetRotation();
+
+							if (i == 0) {
+								fGunRot -= 0.2;
+							} else if (i == 2) {
+								fGunRot += 0.2;
+							}
+
+							laser.SetRotation(fGunRot);
+							laser.SetOwner(@this);
+							
+							Ent_SpawnEntity("weapon_laser", @laser, vecBulletPos);
+						}
 						
 						HUD_UpdateAmmoItem("laser", HUD_GetAmmoItemCurrent("laser") - 1, HUD_GetAmmoItemMax("laser"));
 						
 						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\laser.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
 					}
-				} else if (this.m_iCurrentWeapon == WEAPON_SHOTGUN) {
-					if (HUD_GetAmmoItemCurrent("shotgun") > 0) {
-						for (int i = 0; i < 3; i++) {
-							CGunEntity @gun = CGunEntity();
+				} else if (this.m_iCurrentWeapon == WEAPON_MISSILE) {
+					if (HUD_GetAmmoItemCurrent("missile") > 0) {
+						CMissileEntity@ missile = CMissileEntity();
+						missile.SetRotation(this.GetRotation());
+						missile.SetOwner(@this);
+						Ent_SpawnEntity("weapon_missile", @missile, this.m_vecPos);
 						
-							float fGunRot = this.GetRotation();
-							
-							if (i == 0) {
-								fGunRot -= 0.2;
-							} else if (i == 2) {
-								fGunRot += 0.2;
-							}
-							
-							gun.SetRotation(fGunRot);
-							gun.SetOwner(@this);
-							
-							Ent_SpawnEntity("weapon_gun", @gun, vecBulletPos);
-						}
-						
-						HUD_UpdateAmmoItem("shotgun", HUD_GetAmmoItemCurrent("shotgun") - 1, HUD_GetAmmoItemMax("shotgun"));
+						HUD_UpdateAmmoItem("missile", HUD_GetAmmoItemCurrent("missile") - 1, HUD_GetAmmoItemMax("missile"));
 						
 						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\shotgun.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
-
-						this.m_tmrShowFlare.Reset();
-						this.m_tmrShowFlare.SetActive(true);
 					}
-				}*/
+				}
 			}
 		}
 		
@@ -322,14 +317,10 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 			if (this.m_bMayThrow) {
 				this.m_bMayThrow = false;
 				
-				if (HUD_GetCollectableCount("grenade") > 0) {
-					CGrenadeEntity @grenade = CGrenadeEntity();
-					grenade.SetOwner(this);
-					grenade.SetRotation(this.GetRotation());
+				if (HUD_GetCollectableCount("circlepulse") > 0) {
+					//Circle Pulse spawning...
 					
-					Ent_SpawnEntity("weapon_grenade", @grenade, this.m_vecPos);
-					
-					HUD_UpdateCollectable("grenade", HUD_GetCollectableCount("grenade") - 1);
+					HUD_UpdateCollectable("circlepulse", HUD_GetCollectableCount("circlepulse") - 1);
 				}
 			}
 		}*/
@@ -390,33 +381,6 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 				}
 			}
 		}
-		
-		//Process animation
-		/*if (this.m_bShooting) {
-			if (this.m_iCurrentWeapon == WEAPON_HANDGUN) {
-				this.m_animShootHandgun.Process();
-			} else if (this.m_iCurrentWeapon == WEAPON_RIFLE) {
-				this.m_animShootRifle.Process();
-			} else if (this.m_iCurrentWeapon == WEAPON_SHOTGUN) {
-				this.m_animShootShotgun.Process();
-			}
-		} else if (this.m_bMoving) {
-			if (this.m_iCurrentWeapon == WEAPON_HANDGUN) {
-				this.m_animMoveHandgun.Process();
-			} else if (this.m_iCurrentWeapon == WEAPON_RIFLE) {
-				this.m_animMoveRifle.Process();
-			} else if (this.m_iCurrentWeapon == WEAPON_SHOTGUN) {
-				this.m_animMoveShotgun.Process();
-			}
-		} else {
-			if (this.m_iCurrentWeapon == WEAPON_HANDGUN) {
-				this.m_animIdleHandgun.Process();
-			} else if (this.m_iCurrentWeapon == WEAPON_RIFLE) {
-				this.m_animIdleRifle.Process();
-			} else if (this.m_iCurrentWeapon == WEAPON_SHOTGUN) {
-				this.m_animIdleShotgun.Process();
-			}
-		}*/
 	}
 	
 	//Entity can draw everything in default order here
@@ -637,14 +601,14 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		}
 		
 		if (vKey == GetKeyBinding("SLOT1")) {
-			this.m_iCurrentWeapon = WEAPON_HANDGUN;
-			HUD_SetAmmoDisplayItem("handgun");
+			this.m_iCurrentWeapon = WEAPON_GUN;
+			HUD_SetAmmoDisplayItem("gun");
 		} else if (vKey == GetKeyBinding("SLOT2")) {
-			this.m_iCurrentWeapon = WEAPON_RIFLE;
+			this.m_iCurrentWeapon = WEAPON_LASER;
 			HUD_SetAmmoDisplayItem("laser");
 		} else if (vKey == GetKeyBinding("SLOT3")) {
-			this.m_iCurrentWeapon = WEAPON_SHOTGUN;
-			HUD_SetAmmoDisplayItem("shotgun");
+			this.m_iCurrentWeapon = WEAPON_MISSILE;
+			HUD_SetAmmoDisplayItem("missile");
 		}
 	}
 	
@@ -732,12 +696,21 @@ void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent,
 	Ent_SpawnEntity(szIdent, @player, vecPos);
 	player.SetRotation(fRot);
 	
-	/*HUD_AddAmmoItem("handgun", GetPackagePath() + "gfx\\handgunhud.png");
-	HUD_UpdateAmmoItem("handgun", 125, 0);
-	HUD_SetAmmoDisplayItem("handgun");*/
-	
+	HUD_AddAmmoItem("gun", GetPackagePath() + "gfx\\ammo\\ammo_gun_sym.bmp");
+	HUD_UpdateAmmoItem("gun", 125, 0);
+	HUD_SetAmmoDisplayItem("gun");
+
+	HUD_AddAmmoItem("laser", GetPackagePath() + "gfx\\ammo\\ammo_laser_sym.bmp");
+	HUD_UpdateAmmoItem("laser", 50, 0);
+
+	HUD_AddAmmoItem("missile", GetPackagePath() + "gfx\\ammo\\ammo_missile_sym.bmp");
+	HUD_UpdateAmmoItem("missile", 25, 0);
+
 	HUD_AddCollectable("coins", GetPackagePath() + "gfx\\coin.png", true);
 	HUD_UpdateCollectable("coins", 0);
+
+	HUD_AddCollectable("circlepulse", GetPackagePath() + "gfx\\ammo\\ammo_cp_sym.bmp", true);
+	HUD_UpdateCollectable("circlepulse", 10);
 }
 
 //Restore game state

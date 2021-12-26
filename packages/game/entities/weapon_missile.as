@@ -29,14 +29,22 @@ class CMissileEntity : IScriptedEntity
 	bool m_bRemove;
 	float m_fSpeed;
 	int m_iTrailIndex;
+	IScriptedEntity@ m_pOwner;
 
 	CMissileEntity()
     {
 		this.m_bRemove = false;
 		this.m_vecSize = Vector(32, 32);
-		this.m_fSpeed = 200;
+		this.m_fSpeed = 500;
 		this.m_iTrailIndex = 0;
+		@this.m_pOwner = null;
     }
+
+	//Set owner
+	void SetOwner(IScriptedEntity@ pOwner)
+	{
+		@this.m_pOwner = @pOwner;
+	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument
 	void OnSpawn(const Vector& in vec)
@@ -133,7 +141,7 @@ class CMissileEntity : IScriptedEntity
 	//Called for entity collisions
 	void OnCollided(IScriptedEntity@ ref)
 	{
-		if (ref.GetName() == "player") {
+		if (@ref != @this.m_pOwner) {
 			this.m_bRemove = true;
 			ref.OnDamage(MISSILE_DAMAGE);
 		}

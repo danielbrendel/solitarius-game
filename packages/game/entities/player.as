@@ -435,7 +435,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		
 		Color sDrawingColor = (this.m_tmrFlicker.IsActive()) ? Color(255, 0, 0, 150) : Color(0, 0, 0, 0);
 		
-		R_DrawSprite(this.m_hPlayer, Vector(Wnd_GetWindowCenterX() - 101 / 2, Wnd_GetWindowCenterY() - 93 / 2), 0, this.m_fRotation, Vector(-1, -1), 0.0, 0.0, false, Color(0, 0, 0, 0));
+		R_DrawSprite(this.m_hPlayer, Vector(Wnd_GetWindowCenterX() - 101 / 2, Wnd_GetWindowCenterY() - 93 / 2), 0, this.m_fRotation, Vector(-1, -1), 0.0, 0.0, bDrawCustomColor, sDrawingColor);
 		R_DrawSprite(this.m_hCrosshair, Vector(this.m_vecCursorPos[0] - this.m_vecCrosshair[0] / 2, this.m_vecCursorPos[1] - this.m_vecCrosshair[1] / 2), 0, 0.0, Vector(-1, -1), 0.0, 0.0, false, Color(0, 0, 0, 0));
 
 		if (this.m_tmrGameCounter.IsActive()) {

@@ -17,6 +17,7 @@ string g_szPackagePath = "";
 #include "weapon_gun.as"
 #include "weapon_laser.as"
 #include "weapon_missile.as"
+#include "weapon_circlepulse.as"
 
 const int PLAYER_SPEED = 250;
 const int BTN_FORWARD = (1 << 0);
@@ -313,17 +314,19 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		}
 		
 		//Process throwing
-		/*if ((this.m_uiButtons & BTN_THROW) == BTN_THROW) {
+		if ((this.m_uiButtons & BTN_THROW) == BTN_THROW) {
 			if (this.m_bMayThrow) {
 				this.m_bMayThrow = false;
 				
 				if (HUD_GetCollectableCount("circlepulse") > 0) {
-					//Circle Pulse spawning...
+					CCirclePulseEntity@ ent = CCirclePulseEntity();
+					ent.SetOwner(@this);
+					Ent_SpawnEntity("weapon_circlepulse", @ent, this.m_vecPos);
 					
 					HUD_UpdateCollectable("circlepulse", HUD_GetCollectableCount("circlepulse") - 1);
 				}
 			}
-		}*/
+		}
 
 		//Proess dodging
 
@@ -709,7 +712,7 @@ void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent,
 	HUD_AddCollectable("coins", GetPackagePath() + "gfx\\coin.png", true);
 	HUD_UpdateCollectable("coins", 0);
 
-	HUD_AddCollectable("circlepulse", GetPackagePath() + "gfx\\ammo\\ammo_cp_sym.bmp", true);
+	HUD_AddCollectable("circlepulse", GetPackagePath() + "gfx\\circlepulse_small.bmp", true);
 	HUD_UpdateCollectable("circlepulse", 10);
 }
 

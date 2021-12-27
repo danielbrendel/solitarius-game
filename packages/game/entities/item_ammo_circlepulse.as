@@ -1,5 +1,5 @@
 /*
-	Casual Game Engine: Casual Pixel Warrior
+	Casual Game Engine: Solitarius
 	
 	A sample and test game for Casual Game Engine
 	

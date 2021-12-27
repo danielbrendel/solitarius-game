@@ -680,7 +680,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	//Add ammo
 	void AddAmmo(const string &in ident, uint amount)
 	{
-		if (ident != "grenade") {
+		if (ident != "circlepulse") {
 			HUD_UpdateAmmoItem(ident, HUD_GetAmmoItemCurrent(ident) + amount, HUD_GetAmmoItemMax(ident));
 		} else {
 			HUD_UpdateCollectable(ident, HUD_GetCollectableCount(ident) + amount);

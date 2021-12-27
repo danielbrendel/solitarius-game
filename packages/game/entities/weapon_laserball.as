@@ -114,7 +114,7 @@ class CLaserBallEntity : IScriptedEntity
 	//Called when the entity collided with another entity
 	void OnCollided(IScriptedEntity@ ref)
 	{
-		if ((@ref != @this.m_pOwner) && (ref.GetName() != this.GetName())) {
+		if ((@ref != @this.m_pOwner) && (ref.GetName() != this.GetName()) && (ref.GetName() != this.m_pOwner.GetName())) {
 			this.m_bRemove = true;
 			
 			ref.OnDamage(LASER_SHOT_DAMAGE);

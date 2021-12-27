@@ -11,15 +11,6 @@
 	Released under the MIT license
 */
 
-#include "headcrabcls.as"
-#include "tankcls.as"
-#include "ballistacls.as"
-#include "teslatowercls.as"
-#include "wolfdragoncls.as"
-#include "frogatorcls.as"
-#include "mechcls.as"
-#include "helicoptercls.as"
-#include "alieninfantrycls.as"
 #include "alienvehiclecls.as"
 #include "alienbosscls.as"
 
@@ -95,34 +86,7 @@ class CWavePoint : IScriptedEntity
 		for (size_t i = 0; i < this.m_uiEntCount; i++) {
 			Vector vecSpawnPos = Vector(this.m_vecPos[0] + Util_Random(0, 200) - 100, this.m_vecPos[1] + Util_Random(0, 200) - 100);
 			
-			if (this.m_szTarget == "headcrab") {
-				CHeadcrabEntity@ ent = CHeadcrabEntity();
-				Ent_SpawnEntity("headcrab", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "tank") {
-				CTankEntity@ ent = CTankEntity();
-				Ent_SpawnEntity("tank", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "ballista") {
-				CBallista@ ent = CBallista();
-				Ent_SpawnEntity("ballista", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "teslatower") {
-				CTeslaTower@ ent = CTeslaTower();
-				Ent_SpawnEntity("teslatower", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "wolfdragon") {
-				CWolfdragon@ ent = CWolfdragon();
-				Ent_SpawnEntity("wolfdragon", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "frogator") {
-				CFrogator@ ent = CFrogator();
-				Ent_SpawnEntity("frogator", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "mech") {
-				CMech@ ent = CMech();
-				Ent_SpawnEntity("mech", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "helicopter") {
-				CHelicopter@ ent = CHelicopter();
-				Ent_SpawnEntity("helicopter", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "alieninfantry") {
-				CAlienInfantry@ ent = CAlienInfantry();
-				Ent_SpawnEntity("alieninfantry", @ent, vecSpawnPos);
-			} else if (this.m_szTarget == "alienvehicle") {
+			if (this.m_szTarget == "alienvehicle") {
 				CAlienVehicle@ ent = CAlienVehicle();
 				Ent_SpawnEntity("alienvehicle", @ent, vecSpawnPos);
 			} else if (this.m_szTarget == "alienboss") {

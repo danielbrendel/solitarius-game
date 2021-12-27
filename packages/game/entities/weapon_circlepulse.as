@@ -51,7 +51,7 @@ class CCirclePulseEntity : IScriptedEntity
 		S_PlaySound(this.m_hSound, 10);
 		BoundingBox bbox;
 		bbox.Alloc();
-		bbox.AddBBoxItem(Vector(15, 15), Vector(this.m_vecSize[0] * 2, this.m_vecSize[1] * 2));
+		bbox.AddBBoxItem(Vector(-128, -128), Vector(this.m_vecSize[0] * 3, this.m_vecSize[1] * 3));
 		this.m_oModel.Alloc();
 		this.m_oModel.Initialize2(bbox, this.m_hSprite);
 	}

@@ -155,6 +155,7 @@ class CAlienBoss : IScriptedEntity
 			}
 
 			missile.SetRotation(fMissileRot);
+			missile.SetOwner(@this);
 
 			Ent_SpawnEntity("weapon_missile", missile, this.m_vecPos);
 		}
@@ -255,7 +256,7 @@ class CAlienBoss : IScriptedEntity
 		this.m_hMove = R_LoadSprite(GetPackagePath() + "gfx\\alienboss.png", 1, 288, 321, 1, false);
 		this.m_hLaserSound = S_QuerySound(GetPackagePath() + "sound\\laser.wav");
 		this.m_hMissileSound = S_QuerySound(GetPackagePath() + "sound\\missile_launch.wav");
-		this.m_hBoltSound = S_QuerySound(GetPackagePath() + "sound\\tesla_attack.wav");
+		this.m_hBoltSound = S_QuerySound(GetPackagePath() + "sound\\bolt.wav");
 		this.m_hBossFont = R_LoadFont("Arial", 21, 45);
 		this.m_tmrMove.SetDelay(10);
 		this.m_tmrMove.Reset();

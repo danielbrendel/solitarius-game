@@ -28,6 +28,7 @@ class CItemAmmoBase : IScriptedEntity
 	SoundHandle m_hReceive;
 	SoundHandle m_hActivate;
 	uint m_uiSupplyCount;
+	bool m_bTurnAround;
 	
 	CItemAmmoBase()
     {
@@ -37,6 +38,7 @@ class CItemAmmoBase : IScriptedEntity
 		this.m_fSize = 0.00;
 		this.m_uiSupplyCount = 100;
 		this.m_szWeapon = "";
+		this.m_bTurnAround = true;
     }
 	
 	//Set sprite
@@ -55,6 +57,12 @@ class CItemAmmoBase : IScriptedEntity
 	void SetWeapon(const string &in szWeapon)
 	{
 		this.m_szWeapon = szWeapon;
+	}
+
+	//Set turn around flag
+	void SetTurnAround(bool bTurn)
+	{
+		this.m_bTurnAround = bTurn;
 	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument
@@ -90,9 +98,11 @@ class CItemAmmoBase : IScriptedEntity
 		if (this.m_tmrAnim.IsElapsed()) {
 			this.m_tmrAnim.Reset();
 			
-			this.m_fRotation += 0.10;
-			if (this.m_fRotation >= 6.30) {
-				this.m_fRotation = 0.00;
+			if (this.m_bTurnAround) {
+				this.m_fRotation += 0.10;
+				if (this.m_fRotation >= 6.30) {
+					this.m_fRotation = 0.00;
+				}
 			}
 			
 			this.m_fSize += 0.10;

@@ -26,23 +26,14 @@ class CWaveMonitor : IScriptedEntity
 	//Indicate if all opponents are defeated
 	bool AllOpponentsDefeated()
 	{
-		return Ent_GetEntityNameCount("headcrab") == 0
-			&& Ent_GetEntityNameCount("tank") == 0
-			&& Ent_GetEntityNameCount("teslatower") == 0
-			&& Ent_GetEntityNameCount("frogator") == 0
-			&& Ent_GetEntityNameCount("wolfdragon") == 0
-			&& Ent_GetEntityNameCount("helicopter") == 0
-			&& Ent_GetEntityNameCount("alieninfantry") == 0
-			&& Ent_GetEntityNameCount("alienvehicle") == 0
-			&& Ent_GetEntityNameCount("ballista") == 0
-			&& Ent_GetEntityNameCount("mech") == 0
+		return Ent_GetEntityNameCount("alienvehicle") == 0
 			&& Ent_GetEntityNameCount("alienboss") == 0;
 	}
 
 	//Handle Steam Achievements
 	void HandleAchievements()
 	{
-		if (GetCurrentMap() == "greenland.cfg") {
+		/*if (GetCurrentMap() == "greenland.cfg") {
 			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_GREENLAND")) {
 				Steam_SetAchievement("ACHIEVEMENT_FINISH_GREENLAND");
 			}
@@ -58,7 +49,7 @@ class CWaveMonitor : IScriptedEntity
 			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_DEFEAT_BOSS")) {
 				Steam_SetAchievement("ACHIEVEMENT_DEFEAT_BOSS");
 			}
-		}
+		}*/
 	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument

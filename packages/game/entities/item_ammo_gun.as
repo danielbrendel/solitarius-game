@@ -13,26 +13,27 @@
 
 #include "item_ammo.as"
 
-/* Shotgun ammo item entity */
-class CItemAmmoShotgun : CItemAmmoBase
+/* Gun ammo item entity */
+class CItemAmmoGun : CItemAmmoBase
 {
-	CItemAmmoShotgun()
+	CItemAmmoGun()
 	{
-		this.SetSprite("shotgunhud.png");
-		this.SetWeapon("shotgun");
-		this.SetSupplyCount(10);
+		this.SetSprite("ammo\\ammo_gun_sym.bmp");
+		this.SetWeapon("gun");
+		this.SetSupplyCount(50);
 	}
 	
 	//Return a name string here, e.g. the class name or instance name.
 	string GetName()
 	{
-		return "item_ammo_shotgun";
+		return "item_ammo_gun";
 	}
 }
 
 //Create ammo entity
 void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent, const string &in szPath, const string &in szProps)
 {
-	CItemAmmoShotgun @ammo = CItemAmmoShotgun();
+	CItemAmmoGun @ammo = CItemAmmoGun();
+	ammo.SetTurnAround(false);
 	Ent_SpawnEntity(szIdent, @ammo, vecPos);
 }

@@ -71,7 +71,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
     {
 		this.m_uiButtons = 0;
 		this.m_uiHealth = 100;
-		this.m_vecSize = Vector(64, 64);
+		this.m_vecSize = Vector(101, 93);
 		this.m_vecCrosshair = Vector(32, 32);
 		this.m_uiFlickerCount = 0;
 		this.m_bMoving = false;
@@ -103,7 +103,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	{
 		this.m_vecPos = vec;
 		this.m_fRotation = 0.0f;
-		this.m_hPlayer = R_LoadSprite(GetPackagePath() + "gfx\\player.png", 1, 101, 93, 1, false);
+		this.m_hPlayer = R_LoadSprite(GetPackagePath() + "gfx\\player.png", 1, this.m_vecSize[0], this.m_vecSize[1], 1, false);
 		this.m_hCrosshair = R_LoadSprite(GetPackagePath() + "gfx\\crosshair.png", 1, this.m_vecCrosshair[0], this.m_vecCrosshair[1], 1, false);
 		this.m_hDodge = S_QuerySound(GetPackagePath() + "sound\\swoosh.wav");
 		this.m_hGameInfoFont = R_LoadFont("Verdana", 21, 45);
@@ -131,7 +131,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		bbox.Alloc();
 		bbox.AddBBoxItem(Vector(0, 0), this.m_vecSize);
 		this.m_oModel.Alloc();
-		this.m_oModel.SetCenter(Vector(32, 32));
+		this.m_oModel.SetCenter(Vector(this.m_vecSize[0] / 2, this.m_vecSize[1] / 2));
 		this.m_oModel.Initialize2(bbox, this.m_hPlayer);
 	}
 	
@@ -306,7 +306,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 						
 						HUD_UpdateAmmoItem("missile", HUD_GetAmmoItemCurrent("missile") - 1, HUD_GetAmmoItemMax("missile"));
 						
-						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\shotgun.wav");
+						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\missile_launch.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
 					}
 				}

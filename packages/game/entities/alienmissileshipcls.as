@@ -11,16 +11,16 @@
 	Released under the MIT license
 */
 
-#include "weapon_laserball.as"
+#include "weapon_missile.as"
 #include "explosion.as"
 #include "item_coin.as"
 
-const int C_ALIENVEHICLE_REACT_RANGE = 500;
-const int C_ALIENVEHICLE_ATTACK_RANGE = 350;
-const float C_ALIENVEHICLE_DEFAULT_SPEED = 65.0;
+const int C_ALIENMISSILESHIP_REACT_RANGE = 500;
+const int C_ALIENMISSILESHIP_ATTACK_RANGE = 350;
+const float C_ALIENMISSILESHIP_DEFAULT_SPEED = 65.0;
 
-/* Alien vehicle entity */
-class CAlienVehicle : IScriptedEntity
+/* Alien missile ship entity */
+class CAlienMissileShip : IScriptedEntity
 {
 	Vector m_vecPos;
 	Vector m_vecSize;
@@ -63,26 +63,10 @@ class CAlienVehicle : IScriptedEntity
 		if ((@pEntity == null) || (!Ent_IsValid(pEntity)))
 			return;
 		
-		for (int i = 0; i < 5; i++) {
-			CLaserBallEntity@ ball = CLaserBallEntity();
-
-			float fBallRot = this.GetRotation();
-							
-			if (i == 0) {
-				fBallRot -= 0.3;
-			} else if (i == 1) {
-				fBallRot -= 0.2;
-			} else if (i == 3) {
-				fBallRot += 0.2;
-			} else if (i == 2) {
-				fBallRot += 0.3;
-			}
-
-			ball.SetRotation(fBallRot);
-			ball.SetOwner(@this);
-
-			Ent_SpawnEntity("weapon_laserball", ball, this.m_vecPos);
-		}
+		CMissileEntity@ missile = CMissileEntity();
+		missile.SetRotation(this.GetRotation());
+		missile.SetOwner(@this);
+		Ent_SpawnEntity("weapon_missile", @missile, this.m_vecPos);
 
 		S_PlaySound(this.m_hAttackSound, S_GetCurrentVolume());
 	}
@@ -95,17 +79,17 @@ class CAlienVehicle : IScriptedEntity
 		this.m_bInAttackRange = false;
 
 		IScriptedEntity@ pEntity = Ent_GetPlayerEntity();
-		if (this.m_vecPos.Distance(pEntity.GetPosition()) <= C_ALIENVEHICLE_REACT_RANGE) {
+		if (this.m_vecPos.Distance(pEntity.GetPosition()) <= C_ALIENMISSILESHIP_REACT_RANGE) {
 			this.m_bGotEnemy = true;
 		}
 		
 		if (this.m_bGotEnemy) {
-			if (this.m_fSpeed == C_ALIENVEHICLE_DEFAULT_SPEED)
+			if (this.m_fSpeed == C_ALIENMISSILESHIP_DEFAULT_SPEED)
 				this.m_fSpeed *= 2;
 				
 			this.LookAt(pEntity.GetPosition());
 
-			if (this.m_vecPos.Distance(pEntity.GetPosition()) <= C_ALIENVEHICLE_ATTACK_RANGE) {
+			if (this.m_vecPos.Distance(pEntity.GetPosition()) <= C_ALIENMISSILESHIP_ATTACK_RANGE) {
 				this.m_bInAttackRange = true;
 				this.m_tmrAttack.Update();
 				if (this.m_tmrAttack.IsElapsed()) {
@@ -118,11 +102,11 @@ class CAlienVehicle : IScriptedEntity
 		}
 	}
 
-	CAlienVehicle()
+	CAlienMissileShip()
     {
-		this.m_vecSize = Vector(76, 97);
+		this.m_vecSize = Vector(55, 40);
 		this.m_bGotEnemy = this.m_bLastGotEnemy = false;
-		this.m_fSpeed = C_ALIENVEHICLE_DEFAULT_SPEED;
+		this.m_fSpeed = C_ALIENMISSILESHIP_DEFAULT_SPEED;
 		this.m_uiHealth = 90;
 		this.m_uiFlickerCount = 0;
     }
@@ -132,8 +116,8 @@ class CAlienVehicle : IScriptedEntity
 	{
 		this.m_vecPos = vec;
 		this.m_fRotation = 0.0f;
-		this.m_hMove = R_LoadSprite(GetPackagePath() + "gfx\\alienvehicle.png", 1, 76, 97, 1, false);
-		this.m_hAttackSound = S_QuerySound(GetPackagePath() + "sound\\laser.wav");
+		this.m_hMove = R_LoadSprite(GetPackagePath() + "gfx\\alienships\\alienmissileship.png", 1, 55, 40, 1, false);
+		this.m_hAttackSound = S_QuerySound(GetPackagePath() + "sound\\missile_launch.wav");
 		this.m_tmrMove.SetDelay(10);
 		this.m_tmrMove.Reset();
 		this.m_tmrMove.SetActive(true);
@@ -306,7 +290,7 @@ class CAlienVehicle : IScriptedEntity
 	//Return a name string here, e.g. the class name or instance name.
 	string GetName()
 	{
-		return "alienvehicle";
+		return "alienmissileship";
 	}
 	
 	//Return save game properties

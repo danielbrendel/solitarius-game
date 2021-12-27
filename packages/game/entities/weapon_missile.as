@@ -141,7 +141,7 @@ class CMissileEntity : IScriptedEntity
 	//Called for entity collisions
 	void OnCollided(IScriptedEntity@ ref)
 	{
-		if ((@ref != @this.m_pOwner) && (ref.GetName() != this.GetName()) && (ref.GetName() != "weapon_gun") && (ref.GetName() != "weapon_laser") && (ref.GetName() != "weapon_laserball") && (ref.GetName() != "item_ammo_gun") && (ref.GetName() != "item_ammo_laser") && (ref.GetName() != "item_ammo_missile") && (ref.GetName() != "item_ammo_circlepulse") && (ref.GetName() != "item_coin") && (ref.GetName() != "item_health")) {
+		if ((@ref != @this.m_pOwner) && (ref.GetName() != this.GetName()) && (ref.GetName() != this.m_pOwner.GetName()) && (ref.GetName() != "weapon_gun") && (ref.GetName() != "weapon_laser") && (ref.GetName() != "weapon_laserball") && (ref.GetName() != "item_ammo_gun") && (ref.GetName() != "item_ammo_laser") && (ref.GetName() != "item_ammo_missile") && (ref.GetName() != "item_ammo_circlepulse") && (ref.GetName() != "item_coin") && (ref.GetName() != "item_health")) {
 			this.m_bRemove = true;
 			ref.OnDamage(MISSILE_DAMAGE);
 		}

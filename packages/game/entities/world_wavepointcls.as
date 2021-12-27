@@ -11,7 +11,10 @@
 	Released under the MIT license
 */
 
-#include "alienvehiclecls.as"
+#include "alienlasershipcls.as"
+#include "alienmissileshipcls.as"
+#include "alienboltshipcls.as"
+#include "alienrotatorshipcls.as"
 #include "alienbosscls.as"
 
 /* Wave point entity */
@@ -86,12 +89,23 @@ class CWavePoint : IScriptedEntity
 		for (size_t i = 0; i < this.m_uiEntCount; i++) {
 			Vector vecSpawnPos = Vector(this.m_vecPos[0] + Util_Random(0, 200) - 100, this.m_vecPos[1] + Util_Random(0, 200) - 100);
 			
-			if (this.m_szTarget == "alienvehicle") {
-				CAlienVehicle@ ent = CAlienVehicle();
-				Ent_SpawnEntity("alienvehicle", @ent, vecSpawnPos);
+			if (this.m_szTarget == "alienlasership") {
+				CAlienLaserShip@ ent = CAlienLaserShip();
+				Ent_SpawnEntity("alienlasership", @ent, vecSpawnPos);
+			} else if (this.m_szTarget == "alienmissileship") {
+				CAlienMissileShip@ ent = CAlienMissileShip();
+				Ent_SpawnEntity("alienmissileship", @ent, vecSpawnPos);
+			} else if (this.m_szTarget == "alienboltship") {
+				CAlienBoltShip@ ent = CAlienBoltShip();
+				Ent_SpawnEntity("alienboltship", @ent, vecSpawnPos);
+			} else if (this.m_szTarget == "alienrotatorship") {
+				CAlienRotatorShip@ ent = CAlienRotatorShip();
+				Ent_SpawnEntity("alienrotatorship", @ent, vecSpawnPos);
 			} else if (this.m_szTarget == "alienboss") {
 				CAlienBoss@ ent = CAlienBoss();
 				Ent_SpawnEntity("alienboss", @ent, vecSpawnPos);
+			} else {
+				HUD_AddMessage("Unknown entity to create: " + this.m_szTarget, HUD_MSG_COLOR_RED);
 			}
 		}
 	}

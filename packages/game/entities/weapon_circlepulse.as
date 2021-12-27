@@ -13,6 +13,7 @@
 
 /* Explosion entity */
 const uint C_DEFAULT_CIRCLEPULSE_DAMAGE = 20;
+const int C_SHIELD_FRAME_MAX = 10;
 class CCirclePulseEntity : IScriptedEntity
 {
 	Vector m_vecPos;
@@ -20,6 +21,8 @@ class CCirclePulseEntity : IScriptedEntity
 	Model m_oModel;
 	Timer m_oExpand;
 	SpriteHandle m_hSprite;
+	array<SpriteHandle> m_aShields;
+	int m_iFrameIndex;
 	SoundHandle m_hSound;
 	IScriptedEntity@ m_pOwner;
     float m_fScale;
@@ -29,6 +32,7 @@ class CCirclePulseEntity : IScriptedEntity
     {
 		this.m_vecSize = Vector(128, 128);
 		@this.m_pOwner = null;
+		this.m_iFrameIndex = 0;
         this.m_fScale = 1.00;
         this.m_uiScaleCount = 0;
     }
@@ -43,7 +47,17 @@ class CCirclePulseEntity : IScriptedEntity
 	void OnSpawn(const Vector& in vec)
 	{
 		this.m_vecPos = vec;
-		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\circlepulse.bmp", 6, this.m_vecSize[0], this.m_vecSize[1], 6, false);
+		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\shield\\00.png", 6, this.m_vecSize[0], this.m_vecSize[1], 6, false);
+		for (int i = 0; i < 11; i++) {
+			string toStr = "";
+			if (i >= 10) {
+				toStr = formatInt(i);
+			} else {
+				toStr = "0" + formatInt(i);
+			}
+
+			this.m_aShields.insertLast(R_LoadSprite(GetPackagePath() + "gfx\\shield\\" + toStr + ".png", 6, this.m_vecSize[0], this.m_vecSize[1], 6, true));
+		}
 		this.m_oExpand.SetDelay(100);
 		this.m_oExpand.Reset();
 		this.m_oExpand.SetActive(true);
@@ -51,7 +65,7 @@ class CCirclePulseEntity : IScriptedEntity
 		S_PlaySound(this.m_hSound, 10);
 		BoundingBox bbox;
 		bbox.Alloc();
-		bbox.AddBBoxItem(Vector(-128, -128), Vector(this.m_vecSize[0] * 3, this.m_vecSize[1] * 3));
+		bbox.AddBBoxItem(Vector(-64, -64), Vector(this.m_vecSize[0] * 2, this.m_vecSize[1] * 2));
 		this.m_oModel.Alloc();
 		this.m_oModel.Initialize2(bbox, this.m_hSprite);
 	}
@@ -69,6 +83,10 @@ class CCirclePulseEntity : IScriptedEntity
 			this.m_oExpand.Reset();
 			this.m_fScale += 0.2;
             this.m_uiScaleCount++;
+			this.m_iFrameIndex++;
+			if (this.m_iFrameIndex >= C_SHIELD_FRAME_MAX) {
+				this.m_iFrameIndex = 0;
+			}
 		}
 	}
 	
@@ -86,7 +104,7 @@ class CCirclePulseEntity : IScriptedEntity
 		Vector vOut;
 		R_GetDrawingPosition(this.m_vecPos, this.m_vecSize, vOut);
 		
-		R_DrawSprite(this.m_hSprite, vOut, 0, 0.0, Vector(-1, -1), this.m_fScale, this.m_fScale, false, Color(0, 0, 0, 0));
+		R_DrawSprite(this.m_aShields[this.m_iFrameIndex], vOut, 0, 0.0, Vector(-1, -1), this.m_fScale, this.m_fScale, false, Color(0, 0, 0, 0));
 	}
 	
 	//Indicate whether this entity shall be removed by the game

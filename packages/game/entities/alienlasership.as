@@ -11,12 +11,12 @@
 	Released under the MIT license
 */
 
-#include "alienvehiclecls.as"
+#include "alienlasershipcls.as"
 
 //Spawn entity initially
 void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent, const string &in szPath, const string &in szProps)
 {
-	CAlienVehicle @ent = CAlienVehicle();
+	CAlienLaserShip @ent = CAlienLaserShip();
 	Ent_SpawnEntity(szIdent, @ent, vecPos);
 }
 

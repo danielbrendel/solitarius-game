@@ -19,7 +19,7 @@ string g_szPackagePath = "";
 #include "weapon_missile.as"
 #include "weapon_circlepulse.as"
 
-const int PLAYER_SPEED = 250;
+const int PLAYER_SPEED = 450;
 const int BTN_FORWARD = (1 << 0);
 const int BTN_BACKWARD = (1 << 1);
 const int BTN_MOVELEFT = (1 << 2);
@@ -34,6 +34,7 @@ const int WEAPON_GUN = 1;
 const int WEAPON_LASER = 2;
 const int WEAPON_MISSILE = 3;
 const uint GAME_COUNTER_MAX = 5;
+
 /* Player entity manager */
 class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 {

@@ -11,55 +11,40 @@
 	Released under the MIT license
 */
 
-/* Vortex entity */
-class CVortexEntity : IScriptedEntity
+/* Smoke entity */
+const int C_FRAME_MAX = 30;
+class CSmokeEntity : IScriptedEntity
 {
 	Vector m_vecPos;
-    float m_fRotation;
 	Vector m_vecSize;
 	Model m_oModel;
+	Timer m_oFrameChange;
 	SpriteHandle m_hSprite;
-    float m_fTurnSpeed;
-    Timer m_tmrTurn;
-    size_t m_uiTurnTimer;
+	int m_iFrameIndex;
+	float m_fScale;
 	
-	CVortexEntity()
+	CSmokeEntity()
     {
-		this.m_vecSize = Vector(1500, 1450);
+		this.m_vecSize = Vector(256, 256);
+		this.m_iFrameIndex = 0;
+		this.m_fScale = 1.00;
     }
 
-    //Set size
-    void SetSize(const Vector &in vecSize)
-    {
-        this.m_vecSize = vecSize;
-    }
-
-    //Set turn speed
-    void SetTurnSpeed(float fSpeed)
-    {
-        this.m_fTurnSpeed = fSpeed;
-    }
-
-    //Set turn timer delay value
-    void SetTimerDelay(size_t uiValue)
-    {
-        this.m_uiTurnTimer = uiValue;
-    }
+	//Set custom scale
+	void SetScale(float fScale)
+	{
+		this.m_fScale = fScale;
+	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument
 	void OnSpawn(const Vector& in vec)
 	{
 		this.m_vecPos = vec;
-        this.m_fRotation = 0.0f;
-		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\vortex.jpg", 1, this.m_vecSize[0], this.m_vecSize[1], 1, true);
-		this.m_tmrTurn.SetDelay(this.m_uiTurnTimer);
-		this.m_tmrTurn.Reset();
-		this.m_tmrTurn.SetActive(true);
-        BoundingBox bbox;
-        bbox.Alloc();
-        bbox.AddBBoxItem(Vector(0, 0), this.m_vecSize);
+		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\smoke.png", 30, 256, 256, 6, false);
+		this.m_oFrameChange.SetDelay(100);
+		this.m_oFrameChange.Reset();
+		this.m_oFrameChange.SetActive(true);
 		this.m_oModel.Alloc();
-        this.m_oModel.Initialize2(bbox, this.m_hSprite);
 	}
 	
 	//Called when the entity gets released
@@ -70,16 +55,24 @@ class CVortexEntity : IScriptedEntity
 	//Process entity stuff
 	void OnProcess()
 	{
-		this.m_tmrTurn.Update();
-        if (this.m_tmrTurn.IsElapsed()) {
-            this.m_tmrTurn.Reset();
+		this.m_oFrameChange.Update();
+		if (this.m_oFrameChange.IsElapsed()) {
+			this.m_oFrameChange.Reset();
 
-            this.m_fRotation += this.m_fTurnSpeed;
-        }
+			this.m_iFrameIndex++;
+			if (this.m_iFrameIndex >= 30) {
+				this.m_iFrameIndex = 0;
+			}
+		}
 	}
 	
 	//Entity can draw everything in default order here
 	void OnDraw()
+	{
+	}
+	
+	//Draw on top
+	void OnDrawOnTop()
 	{
 		//if (!R_ShouldDraw(this.m_vecPos, this.m_vecSize))
 		//	return;
@@ -87,12 +80,7 @@ class CVortexEntity : IScriptedEntity
 		Vector vOut;
 		R_GetDrawingPosition(this.m_vecPos, this.m_vecSize, vOut);
 		
-		R_DrawSprite(this.m_hSprite, vOut, 0, this.m_fRotation, Vector(-1, -1), 0.0, 0.0, false, Color(0, 0, 0, 0));
-	}
-	
-	//Draw on top
-	void OnDrawOnTop()
-	{
+		R_DrawSprite(this.m_hSprite, vOut, this.m_iFrameIndex, 0.0, Vector(-1, -1), this.m_fScale, this.m_fScale, false, Color(0, 0, 0, 0));
 	}
 	
 	//Indicate whether this entity shall be removed by the game
@@ -137,31 +125,29 @@ class CVortexEntity : IScriptedEntity
 	//Set position
 	void SetPosition(const Vector &in vec)
 	{
-        this.m_vecPos = vec;
 	}
 	
 	//Return the rotation. 
 	float GetRotation()
 	{
-		return this.m_fRotation;
+		return 0.0;
 	}
 	
 	//Set rotation
 	void SetRotation(float fRot)
 	{
-        this.m_fRotation = fRot;
 	}
 	
 	//Return a name string here, e.g. the class name or instance name. 
 	string GetName()
 	{
-		return "vortex";
+		return "decal";
 	}
 	
 	//This vector is used for drawing the selection box
 	Vector& GetSize()
 	{
-		return this.m_vecSize;
+		return this.m_vecPos;
 	}
 	
 	//Return save game properties
@@ -173,12 +159,10 @@ class CVortexEntity : IScriptedEntity
 	}
 }
 
-//Create the associated entity here
+//Spawn entity initially
 void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent, const string &in szPath, const string &in szProps)
 {
-	CVortexEntity@ ent = CVortexEntity();
-    ent.SetSize(Vector(parseInt(Props_ExtractValue(szProps, "sizex")), parseInt(Props_ExtractValue(szProps, "sizey"))));
-    ent.SetTurnSpeed(parseFloat(Props_ExtractValue(szProps, "tspeed")));
-    ent.SetTimerDelay(parseInt(Props_ExtractValue(szProps, "delay")));
-    Ent_SpawnEntity(szIdent, @ent, vecPos);
+	CSmokeEntity @ent = CSmokeEntity();
+	ent.SetScale(parseFloat(Props_ExtractValue(szProps, "scale")));
+	Ent_SpawnEntity(szIdent, @ent, vecPos);
 }

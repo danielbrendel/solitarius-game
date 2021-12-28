@@ -23,6 +23,7 @@ class CPlasmaBall : IScriptedEntity
 	Model m_oModel;
 	SpriteHandle m_hSprite;
 	int m_iSpriteIndex;
+	SoundHandle m_hHit;
 	Timer m_tmrSpriteChange;
 	Timer m_tmrMayDamage;
 	
@@ -38,6 +39,7 @@ class CPlasmaBall : IScriptedEntity
 		this.m_vecPos = vec;
 		this.m_fRotation = 0.0f;
 		this.m_hSprite = R_LoadSprite(g_szPackagePath + "gfx\\plasmaball.png", 4, 64, 64, 4, false);
+		this.m_hHit = S_QuerySound(GetPackagePath() + "sound\\plasma_hit.wav");
 		this.m_tmrSpriteChange.SetDelay(50);
 		this.m_tmrSpriteChange.Reset();
 		this.m_tmrSpriteChange.SetActive(true);
@@ -125,8 +127,7 @@ class CPlasmaBall : IScriptedEntity
 				
 				ref.OnDamage(PLASMA_BALL_DAMAGE);
 				
-				SoundHandle hHit = S_QuerySound(GetPackagePath() + "sound\\plasma_hit.wav");
-				S_PlaySound(hHit, S_GetCurrentVolume());
+				S_PlaySound(m_hHit, S_GetCurrentVolume());
 			}
 		}
 	}

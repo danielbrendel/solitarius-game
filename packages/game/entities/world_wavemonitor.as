@@ -26,8 +26,11 @@ class CWaveMonitor : IScriptedEntity
 	//Indicate if all opponents are defeated
 	bool AllOpponentsDefeated()
 	{
-		return Ent_GetEntityNameCount("alienvehicle") == 0
-			&& Ent_GetEntityNameCount("alienboss") == 0;
+		return Ent_GetEntityNameCount("alienboltship") == 0
+			&& Ent_GetEntityNameCount("alienboss") == 0
+			&& Ent_GetEntityNameCount("alienlasership") == 0
+			&& Ent_GetEntityNameCount("alienmissileship") == 0
+			&& Ent_GetEntityNameCount("alienrotatorship") == 0;
 	}
 
 	//Handle Steam Achievements

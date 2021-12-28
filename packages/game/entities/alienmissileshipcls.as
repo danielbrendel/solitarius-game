@@ -116,7 +116,7 @@ class CAlienMissileShip : IScriptedEntity
 	{
 		this.m_vecPos = vec;
 		this.m_fRotation = 0.0f;
-		this.m_hMove = R_LoadSprite(GetPackagePath() + "gfx\\alienships\\alienmissileship.png", 1, 55, 40, 1, false);
+		this.m_hMove = R_LoadSprite(GetPackagePath() + "gfx\\alienships\\alienmissileship.png", 1, 76, 97, 1, false);
 		this.m_hAttackSound = S_QuerySound(GetPackagePath() + "sound\\missile_launch.wav");
 		this.m_tmrMove.SetDelay(10);
 		this.m_tmrMove.Reset();

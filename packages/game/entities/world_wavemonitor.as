@@ -36,23 +36,23 @@ class CWaveMonitor : IScriptedEntity
 	//Handle Steam Achievements
 	void HandleAchievements()
 	{
-		/*if (GetCurrentMap() == "greenland.cfg") {
-			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_GREENLAND")) {
-				Steam_SetAchievement("ACHIEVEMENT_FINISH_GREENLAND");
+		if (GetCurrentMap() == "sectora.cfg") {
+			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_SECTOR_A")) {
+				Steam_SetAchievement("ACHIEVEMENT_FINISH_SECTOR_A");
 			}
-		} else if (GetCurrentMap() == "snowland.cfg") {
-			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_SNOWLAND")) {
-				Steam_SetAchievement("ACHIEVEMENT_FINISH_SNOWLAND");
+		} else if (GetCurrentMap() == "sectorb.cfg") {
+			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_SECTOR_B")) {
+				Steam_SetAchievement("ACHIEVEMENT_FINISH_SECTOR_B");
 			}
-		} else if (GetCurrentMap() == "wasteland.cfg") {
-			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_WASTELAND")) {
-				Steam_SetAchievement("ACHIEVEMENT_FINISH_WASTELAND");
+		} else if (GetCurrentMap() == "sectorc.cfg") {
+			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_SECTOR_C")) {
+				Steam_SetAchievement("ACHIEVEMENT_FINISH_SECTOR_C");
 			}
 		} else if (GetCurrentMap() == "bossfight.cfg") {
 			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_DEFEAT_BOSS")) {
 				Steam_SetAchievement("ACHIEVEMENT_DEFEAT_BOSS");
 			}
-		}*/
+		}
 	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument

@@ -112,7 +112,7 @@ class CAlienBoltShip : IScriptedEntity
 		this.m_vecSize = Vector(76, 97);
 		this.m_bGotEnemy = this.m_bLastGotEnemy = false;
 		this.m_fSpeed = C_ALIENBOLTSHIP_DEFAULT_SPEED;
-		this.m_uiHealth = 90;
+		this.m_uiHealth = 150;
 		this.m_uiFlickerCount = 0;
     }
 	
@@ -137,7 +137,7 @@ class CAlienBoltShip : IScriptedEntity
 		this.m_tmrFlicker.SetActive(false);
 		BoundingBox bbox;
 		bbox.Alloc();
-		bbox.AddBBoxItem(Vector(-50, -50), this.m_vecSize);
+		bbox.AddBBoxItem(Vector(0, 0), this.m_vecSize);
 		this.m_oModel.Alloc();
 		this.m_oModel.Initialize2(bbox, this.m_hMove);
 	}

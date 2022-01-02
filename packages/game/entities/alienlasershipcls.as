@@ -15,7 +15,7 @@
 #include "explosion.as"
 #include "item_coin.as"
 
-const int C_ALIENLASERSHIP_REACT_RANGE = 500;
+const int C_ALIENLASERSHIP_REACT_RANGE = 590;
 const int C_ALIENLASERSHIP_ATTACK_RANGE = 350;
 const float C_ALIENLASERSHIP_DEFAULT_SPEED = 65.0;
 
@@ -120,7 +120,7 @@ class CAlienLaserShip : IScriptedEntity
 		this.m_vecSize = Vector(76, 97);
 		this.m_bGotEnemy = this.m_bLastGotEnemy = false;
 		this.m_fSpeed = C_ALIENLASERSHIP_DEFAULT_SPEED;
-		this.m_uiHealth = 90;
+		this.m_uiHealth = 200;
 		this.m_uiFlickerCount = 0;
     }
 	
@@ -145,7 +145,7 @@ class CAlienLaserShip : IScriptedEntity
 		this.m_tmrFlicker.SetActive(false);
 		BoundingBox bbox;
 		bbox.Alloc();
-		bbox.AddBBoxItem(Vector(-50, -50), this.m_vecSize);
+		bbox.AddBBoxItem(Vector(0, 0), this.m_vecSize);
 		this.m_oModel.Alloc();
 		this.m_oModel.Initialize2(bbox, this.m_hMove);
 	}

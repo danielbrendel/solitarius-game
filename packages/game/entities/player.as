@@ -111,7 +111,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		this.m_tmrMayDamage.SetDelay(2000);
 		this.m_tmrMayDamage.Reset();
 		this.m_tmrMayDamage.SetActive(true);
-		this.m_tmrAttack.SetDelay(400);
+		this.m_tmrAttack.SetDelay(100);
 		this.m_tmrAttack.Reset();
 		this.m_tmrAttack.SetActive(true);
 		this.m_tmrDodging.SetDelay(10);
@@ -148,9 +148,9 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		if (!this.m_bProcessOnce) {
 			this.m_bProcessOnce = true;
 
-			/*if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FIRST_START")) {
+			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FIRST_START")) {
 				Steam_SetAchievement("ACHIEVEMENT_FIRST_START");
-			}*/
+			}
 		}
 
 		//Process game counter
@@ -607,12 +607,15 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		if (vKey == GetKeyBinding("SLOT1")) {
 			this.m_iCurrentWeapon = WEAPON_GUN;
 			HUD_SetAmmoDisplayItem("gun");
+			this.m_tmrAttack.SetDelay(100);
 		} else if (vKey == GetKeyBinding("SLOT2")) {
 			this.m_iCurrentWeapon = WEAPON_LASER;
 			HUD_SetAmmoDisplayItem("laser");
+			this.m_tmrAttack.SetDelay(400);
 		} else if (vKey == GetKeyBinding("SLOT3")) {
 			this.m_iCurrentWeapon = WEAPON_MISSILE;
 			HUD_SetAmmoDisplayItem("missile");
+			this.m_tmrAttack.SetDelay(500);
 		}
 	}
 	
@@ -702,7 +705,6 @@ void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent,
 	
 	HUD_AddAmmoItem("gun", GetPackagePath() + "gfx\\ammo\\ammo_gun_sym.bmp");
 	HUD_UpdateAmmoItem("gun", 125, 0);
-	HUD_SetAmmoDisplayItem("gun");
 
 	HUD_AddAmmoItem("laser", GetPackagePath() + "gfx\\ammo\\ammo_laser_sym.bmp");
 	HUD_UpdateAmmoItem("laser", 50, 0);
@@ -715,6 +717,8 @@ void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent,
 
 	HUD_AddCollectable("circlepulse", GetPackagePath() + "gfx\\circlepulse_small.bmp", true);
 	HUD_UpdateCollectable("circlepulse", 10);
+
+	HUD_SetAmmoDisplayItem("gun");
 }
 
 //Restore game state

@@ -15,7 +15,7 @@
 #include "explosion.as"
 #include "item_coin.as"
 
-const int C_ALIENROTATORSHIP_REACT_RANGE = 500;
+const int C_ALIENROTATORSHIP_REACT_RANGE = 550;
 const int C_ALIENROTATORSHIP_ATTACK_RANGE = 350;
 const float C_ALIENROTATORSHIP_DEFAULT_SPEED = 65.0;
 
@@ -125,7 +125,7 @@ class CAlienRotatorShip : IScriptedEntity
 		this.m_vecSize = Vector(67, 58);
 		this.m_bGotEnemy = this.m_bLastGotEnemy = false;
 		this.m_fSpeed = C_ALIENROTATORSHIP_DEFAULT_SPEED;
-		this.m_uiHealth = 90;
+		this.m_uiHealth = 310;
 		this.m_uiFlickerCount = 0;
 		this.m_fDisplayRot = 0.00;
     }

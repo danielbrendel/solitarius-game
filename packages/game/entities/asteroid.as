@@ -70,7 +70,7 @@ class CAsteroidEntity : IScriptedEntity
         this.m_tmrHit.SetActive(true);
         BoundingBox bbox;
         bbox.Alloc();
-        bbox.AddBBoxItem(Vector(0, 0), this.m_vecSize);
+        bbox.AddBBoxItem(Vector(-50, -50), this.m_vecSize);
 		this.m_oModel.Alloc();
         this.m_oModel.Initialize2(bbox, this.m_hSprite);
 	}

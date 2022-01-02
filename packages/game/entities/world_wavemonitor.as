@@ -30,7 +30,8 @@ class CWaveMonitor : IScriptedEntity
 			&& Ent_GetEntityNameCount("alienboss") == 0
 			&& Ent_GetEntityNameCount("alienlasership") == 0
 			&& Ent_GetEntityNameCount("alienmissileship") == 0
-			&& Ent_GetEntityNameCount("alienrotatorship") == 0;
+			&& Ent_GetEntityNameCount("alienrotatorship") == 0
+			&& Ent_GetEntityNameCount("world_wavepoint") == 0;
 	}
 
 	//Handle Steam Achievements

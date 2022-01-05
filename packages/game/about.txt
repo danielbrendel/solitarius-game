@@ -1,4 +1,5 @@
 Solitarius
+A space wave shooter
 Find your way to the goal
 Beware of opponents and obstacles!
 

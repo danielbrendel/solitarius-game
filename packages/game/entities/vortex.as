@@ -1,7 +1,7 @@
 /*
 	Casual Game Engine: Solitarius
 	
-	A sample and test game for Casual Game Engine
+	A top-down 2D singleplayer space wave shooter
 	
 	(C) 2021 - 2022 by Daniel Brendel
 

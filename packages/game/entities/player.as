@@ -356,8 +356,14 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 					this.m_dodgeType = MOVE_WEST;
 					S_PlaySound(this.m_hDodge, S_GetCurrentVolume());
 				}
-			} else if () {
-
+			} else if ((this.m_uiButtons & BTN_MOVERIGHT) == BTN_MOVERIGHT) {
+				if (this.m_tmrMayDodge.IsElapsed()) {
+					this.m_tmrDodging.Reset();
+					this.m_tmrDodging.SetActive(true);
+					this.m_tmrMayDodge.Reset();
+					this.m_dodgeType = MOVE_EAST;
+					S_PlaySound(this.m_hDodge, S_GetCurrentVolume());
+				}
 			}
 
 			this.m_uiButtons &= ~BTN_DODGE;

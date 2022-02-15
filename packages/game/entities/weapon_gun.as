@@ -109,6 +109,12 @@ class CGunEntity : IScriptedEntity
 		return true;
 	}
 	
+	//Indicate if entity can be dormant
+	bool CanBeDormant()
+	{
+		return false;
+	}
+	
 	//Called when the entity collided with another entity
 	void OnCollided(IScriptedEntity@ ref)
 	{

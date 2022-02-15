@@ -112,6 +112,12 @@ class CExplosionEntity : IScriptedEntity
 		return this.m_bDamageAble;
 	}
 	
+	//Indicate if entity can be dormant
+	bool CanBeDormant()
+	{
+		return false;
+	}
+	
 	//Called when the entity recieves damage
 	void OnDamage(uint32 damageValue)
 	{

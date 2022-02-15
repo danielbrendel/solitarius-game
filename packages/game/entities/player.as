@@ -337,7 +337,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 					this.m_tmrDodging.Reset();
 					this.m_tmrDodging.SetActive(true);
 					this.m_tmrMayDodge.Reset();
-					this.m_dodgeType = MOVE_FORWARD;
+					this.m_dodgeType = MOVE_NORTH;
 					S_PlaySound(this.m_hDodge, S_GetCurrentVolume());
 				}
 			} else if ((this.m_uiButtons & BTN_BACKWARD) == BTN_BACKWARD) {
@@ -345,7 +345,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 					this.m_tmrDodging.Reset();
 					this.m_tmrDodging.SetActive(true);
 					this.m_tmrMayDodge.Reset();
-					this.m_dodgeType = MOVE_BACKWARD;
+					this.m_dodgeType = MOVE_SOUTH;
 					S_PlaySound(this.m_hDodge, S_GetCurrentVolume());
 				}
 			}

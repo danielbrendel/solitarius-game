@@ -88,10 +88,10 @@ gameover.btnrestart.fill 65 149 176 255
 gameover.btnrestart.frame 150 150 150 255
 gameover.btnrestart.hover 75 176 210 255
 gameover.btnrestart.text 255 255 255 255
-#gameover.btnlastsavedgame.fill 150 0 0 255
-#gameover.btnlastsavedgame.frame 255 255 255 255
-#gameover.btnlastsavedgame.hover 255 0 0 255
-#gameover.btnlastsavedgame.text 0 0 255 255
+gameover.btnlastsavedgame.fill 65 149 176 255
+gameover.btnlastsavedgame.frame 150 150 150 255
+gameover.btnlastsavedgame.hover 75 176 210 255
+gameover.btnlastsavedgame.text 255 255 255 255
 gameover.btnreturntomain.fill 65 149 176 255
 gameover.btnreturntomain.frame 150 150 150 255
 gameover.btnreturntomain.hover 75 176 210 255

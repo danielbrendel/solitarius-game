@@ -18,6 +18,7 @@ string g_szPackagePath = "";
 #include "weapon_laser.as"
 #include "weapon_missile.as"
 #include "weapon_circlepulse.as"
+#include "infomenu.as"
 
 const int PLAYER_SPEED = 450;
 const int BTN_FORWARD = (1 << 0);
@@ -67,6 +68,8 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	Timer m_tmrGoInfo;
 	FontHandle m_hGameInfoFont;
 	bool m_bProcessOnce;
+	CInfoMenu m_oInfoMenu;
+	SpriteHandle m_hCursor;
 	
 	CPlayerEntity()
     {
@@ -84,6 +87,8 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		this.m_bProcessOnce = false;
 
 		CVar_Register("game_started", CVAR_TYPE_BOOL, "0");
+
+		this.m_oInfoMenu = CInfoMenu();
     }
 	
 	//Aim at screen view position
@@ -98,6 +103,154 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		float flAngle = atan2(float(vecWorldPos[1] - this.m_vecPos[1]), float(vecWorldPos[0] - this.m_vecPos[0]));
 		this.SetRotation(flAngle + 6.30 / 1.36);
 	}
+
+	//Load Sector A dialog
+	void LoadSectorADialog()
+	{
+		array<string> dialog1;
+		dialog1.insertLast("Well, as I can see, the space ship is working.");
+		dialog1.insertLast("");
+		dialog1.insertLast("Finally some good news after the aliens have");
+		dialog1.insertLast("destroyed our planet... We managed to escape ");
+		dialog1.insertLast("with our newly built space ship into space and ");
+		dialog1.insertLast("now it is up to us to defeat the alien army.");
+		dialog1.insertLast("");
+		dialog1.insertLast("In fact we need to find their boss in order to");
+		dialog1.insertLast("stop their attack.");
+
+		array<string> dialog2;
+		dialog2.insertLast("This will not be easy, since before we can");
+		dialog2.insertLast("reach the boss via the portals we have to make ");
+		dialog2.insertLast("it through each infiltrated sector. There we ");
+		dialog2.insertLast("will face manyenemy ships.");
+		dialog2.insertLast("");
+		dialog2.insertLast("But fear not: We are equipped with heavy weaponry,");
+		dialog2.insertLast("so at least we have a chance.");
+
+		array<string> dialog3;
+		dialog3.insertLast("Destroy all enemy waves in each sector and");
+		dialog3.insertLast("then escape through the portal to the next");
+		dialog3.insertLast("sector. Cleaning up sector by sector, we");
+		dialog3.insertLast("will finally face the boss.");
+		dialog3.insertLast("");
+		dialog3.insertLast("Don't get too close to the enemies battleships tho,");
+		dialog3.insertLast("since they are armed, too. You can use dodging to");
+		dialog3.insertLast("evade their bullets. Keep in mind that some may have");
+		dialog3.insertLast("direct impact tho.");
+		dialog3.insertLast("");
+		
+
+		array<string> dialog4;
+		dialog4.insertLast("For bullets you should also use the shield protector");
+		dialog4.insertLast("which destroys nearby enemy bullets.");
+		dialog4.insertLast("");
+		dialog4.insertLast("You can collect items such as ship shield energy and ammo.");
+		dialog4.insertLast("You should also collect all the coins, since they will increase");
+		dialog4.insertLast("your ships shield health energy on each specific amount.");
+		dialog4.insertLast("");
+
+		array<string> dialog5;
+		dialog5.insertLast("I guess it is now up to you...");
+		dialog5.insertLast("");
+		dialog5.insertLast("Good luck, soldier!");
+		dialog5.insertLast("");
+
+		this.m_oInfoMenu.AddDialog(dialog1);
+		this.m_oInfoMenu.AddDialog(dialog2);
+		this.m_oInfoMenu.AddDialog(dialog3);
+		this.m_oInfoMenu.AddDialog(dialog4);
+		this.m_oInfoMenu.AddDialog(dialog5);
+	}
+
+	//Load Sector B dialog
+	void LoadSectorBDialog()
+	{
+		array<string> dialog1;
+		dialog1.insertLast("Okay, so we have cleaned up the last sector.");
+		dialog1.insertLast("");
+		dialog1.insertLast("There are some too go tho.");
+		dialog1.insertLast("");
+		dialog1.insertLast("I sense that some enemy ships have direct impact weapons.");
+		dialog1.insertLast("You should not come too close to them, since they may inflict");
+		dialog1.insertLast("instant damage to our ship.");
+
+		array<string> dialog2;
+		dialog2.insertLast("Keep a healthy distance to them and attack them from afar.");
+		dialog2.insertLast("");
+		dialog2.insertLast("I fear that our energy protector will not work against them.");
+		dialog2.insertLast("");
+		dialog2.insertLast("You have been warned!");
+		dialog2.insertLast("");
+		dialog2.insertLast("Now, good luck, soldier!");
+
+		this.m_oInfoMenu.AddDialog(dialog1);
+		this.m_oInfoMenu.AddDialog(dialog2);
+	}
+
+	//Load Sector C dialog
+	void LoadSectorCDialog()
+	{
+		array<string> dialog1;
+		dialog1.insertLast("We are so close to the enemy boss...");
+		dialog1.insertLast("");
+		dialog1.insertLast("But for now we have to clean this sector first.");
+		dialog1.insertLast("");
+		dialog1.insertLast("There are alien rotator ships in this sector which shoot");
+		dialog1.insertLast("multiple bullets at once. So beware of the upcoming bullet hell!");
+		dialog1.insertLast("");
+
+		array<string> dialog2;
+		dialog2.insertLast("I surely don't need to remind you of your ");
+		dialog2.insertLast("energy protector, right? It will come in");
+		dialog2.insertLast("handy for any bullet hell situation.");
+		dialog2.insertLast("");
+		dialog2.insertLast("I am certain that you will manage to defeat the upcoming waves, too!");
+		dialog2.insertLast("");
+
+		array<string> dialog3;
+		dialog3.insertLast("We will talk again when you have reached the next station...");
+		dialog3.insertLast("");
+		dialog3.insertLast("Now, good luck, soldier!");
+		dialog3.insertLast("");
+
+		this.m_oInfoMenu.AddDialog(dialog1);
+		this.m_oInfoMenu.AddDialog(dialog2);
+		this.m_oInfoMenu.AddDialog(dialog3);
+	}
+
+	//Load bossfight dialog
+	void LoadBossfightDialog()
+	{
+		array<string> dialog1;
+		dialog1.insertLast("Finally... we have reached the enemy boss mother ship!");
+		dialog1.insertLast("");
+		dialog1.insertLast("We now need to gather all our strength and defeat it.");
+		dialog1.insertLast("");
+		dialog1.insertLast("If we don't defeat the boss, all our efforts where in vain,");
+		dialog1.insertLast("because it then may breed more alien ships to plague the galaxy.");
+		dialog1.insertLast("");
+
+		array<string> dialog2;
+		dialog2.insertLast("So, gather your weapons and show this intruder our power.");
+		dialog2.insertLast("");
+		dialog2.insertLast("Beware tho, since the boss is heavly armed. No comparision ");
+		dialog2.insertLast("to its minions at all. ");
+		dialog2.insertLast("");
+		dialog2.insertLast("The boss has multiple different weapons which include direct");
+		dialog2.insertLast("impact weapons as well. Nonetheless use your shield protector");
+		dialog2.insertLast("whenever possible and keep a healthy distance");
+
+		array<string> dialog3;
+		dialog3.insertLast("I am sure victory will be ours.");
+		dialog3.insertLast("");
+		dialog3.insertLast("");
+		dialog3.insertLast("Good luck, soldier. The survivors of planet earth count on you!");
+		dialog3.insertLast("");
+
+		this.m_oInfoMenu.AddDialog(dialog1);
+		this.m_oInfoMenu.AddDialog(dialog2);
+		this.m_oInfoMenu.AddDialog(dialog3);
+	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument
 	void OnSpawn(const Vector& in vec)
@@ -106,6 +259,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		this.m_fRotation = 0.0f;
 		this.m_hPlayer = R_LoadSprite(GetPackagePath() + "gfx\\player.png", 1, this.m_vecSize[0], this.m_vecSize[1], 1, false);
 		this.m_hCrosshair = R_LoadSprite(GetPackagePath() + "gfx\\crosshair.png", 1, this.m_vecCrosshair[0], this.m_vecCrosshair[1], 1, false);
+		this.m_hCursor = R_LoadSprite(GetPackagePath() + "gfx\\menucursor.png", 1, 16, 16, 1, false);
 		this.m_hDodge = S_QuerySound(GetPackagePath() + "sound\\swoosh.wav");
 		this.m_hGameInfoFont = R_LoadFont("Verdana", 21, 45);
 		this.m_tmrMayDamage.SetDelay(2000);
@@ -151,20 +305,37 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FIRST_START")) {
 				Steam_SetAchievement("ACHIEVEMENT_FIRST_START");
 			}
+
+			if (GetCurrentMap() == "sectora.cfg") {
+				this.LoadSectorADialog();
+			} else if (GetCurrentMap() == "sectorb.cfg") {
+				this.LoadSectorBDialog();
+			} else if (GetCurrentMap() == "sectorc.cfg") {
+				this.LoadSectorCDialog();
+			} else if (GetCurrentMap() == "bossfight.cfg") {
+				this.LoadBossfightDialog();
+			}
+
+			this.m_oInfoMenu.SetPosition(Vector(Wnd_GetWindowCenterX() - 250, Wnd_GetWindowCenterY() - 250));
+			this.m_oInfoMenu.Start();
 		}
 
 		//Process game counter
-		if (this.m_tmrGameCounter.IsActive()) {
-			this.m_tmrGameCounter.Update();
-			if (this.m_tmrGameCounter.IsElapsed()) {
-				this.m_uiGameCounter++;
-				if (this.m_uiGameCounter >= GAME_COUNTER_MAX) {
-					this.m_tmrGameCounter.SetActive(false);
-					this.m_tmrGoInfo.Reset();
-					this.m_tmrGoInfo.SetActive(true);
+		if (!this.m_oInfoMenu.IsActive()) {
+			if (this.m_tmrGameCounter.IsActive()) {
+				this.m_tmrGameCounter.Update();
+				if (this.m_tmrGameCounter.IsElapsed()) {
+					this.m_uiGameCounter++;
+					if (this.m_uiGameCounter >= GAME_COUNTER_MAX) {
+						this.m_tmrGameCounter.SetActive(false);
+						this.m_tmrGoInfo.Reset();
+						this.m_tmrGoInfo.SetActive(true);
+					}
 				}
 			}
 		}
+
+		this.m_oInfoMenu.Process();
 
 		if (this.m_uiGameCounter < GAME_COUNTER_MAX) {
 			return;
@@ -420,12 +591,19 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		Color sDrawingColor = (this.m_tmrFlicker.IsActive()) ? Color(255, 0, 0, 150) : Color(0, 0, 0, 0);
 		
 		R_DrawSprite(this.m_hPlayer, Vector(Wnd_GetWindowCenterX() - 101 / 2, Wnd_GetWindowCenterY() - 93 / 2), 0, this.m_fRotation, Vector(-1, -1), 0.0, 0.0, bDrawCustomColor, sDrawingColor);
-		R_DrawSprite(this.m_hCrosshair, Vector(this.m_vecCursorPos[0] - this.m_vecCrosshair[0] / 2, this.m_vecCursorPos[1] - this.m_vecCrosshair[1] / 2), 0, 0.0, Vector(-1, -1), 0.0, 0.0, false, Color(0, 0, 0, 0));
 
 		if (this.m_tmrGameCounter.IsActive()) {
 			R_DrawString(this.m_hGameInfoFont, formatInt(GAME_COUNTER_MAX - this.m_uiGameCounter), Vector(Wnd_GetWindowCenterX() - 10, Wnd_GetWindowCenterY() - 100), Color(100, 0, 0, 255));
 		} else if (this.m_tmrGoInfo.IsActive()) {
 			R_DrawString(this.m_hGameInfoFont, _("app.go", "GO!"), Vector(Wnd_GetWindowCenterX() - 30, Wnd_GetWindowCenterY() - 100), Color(100, 0, 0, 255));
+		}
+
+		this.m_oInfoMenu.Draw();
+
+		if (this.m_oInfoMenu.IsActive()) {
+			R_DrawSprite(this.m_hCursor, Vector(this.m_vecCursorPos[0] - this.m_vecCrosshair[0] / 2, this.m_vecCursorPos[1] - this.m_vecCrosshair[1] / 2), 0, 0.0, Vector(-1, -1), 0.0, 0.0, false, Color(0, 0, 0, 0));
+		} else {
+			R_DrawSprite(this.m_hCrosshair, Vector(this.m_vecCursorPos[0] - this.m_vecCrosshair[0] / 2, this.m_vecCursorPos[1] - this.m_vecCrosshair[1] / 2), 0, 0.0, Vector(-1, -1), 0.0, 0.0, false, Color(0, 0, 0, 0));
 		}
 	}
 	
@@ -644,6 +822,12 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	//Called for mouse presses
 	void OnMousePress(int key, bool bDown)
 	{
+		if (this.m_oInfoMenu.IsActive()) {
+			if ((key == 1) && (!bDown)) {
+				this.m_oInfoMenu.OnMouseClick();
+			}
+		}
+
 		if (this.m_tmrGameCounter.IsActive()) {
 			return;
 		}
@@ -669,6 +853,9 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		
 		//Aim at cursor position
 		this.AimAtScreenPoint(this.m_vecCursorPos);
+
+		//Inform info menu
+		this.m_oInfoMenu.OnUpdateCursorPos(pos);
 	}
 	
 	//Return save game properties

@@ -18,6 +18,7 @@ class CWaveMonitor : IScriptedEntity
 	Vector m_vecSize;
 	Model m_oModel;
 	Timer m_tmrMonitor;
+	Timer m_tmrCoinWatch;
 	
 	CWaveMonitor()
     {
@@ -34,8 +35,8 @@ class CWaveMonitor : IScriptedEntity
 			&& Ent_GetEntityNameCount("world_wavepoint") == 0;
 	}
 
-	//Handle Steam Achievements
-	void HandleAchievements()
+	//Handle goal achievements
+	void HandleGoalAchievements()
 	{
 		if (GetCurrentMap() == "sectora.cfg") {
 			if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_FINISH_SECTOR_A")) {
@@ -55,6 +56,34 @@ class CWaveMonitor : IScriptedEntity
 			}
 		}
 	}
+
+	//Handle coin achievements
+	bool HandleCoinAchievements()
+	{
+		if (Ent_GetEntityNameCount("item_coin") == 0) {
+			if (GetCurrentMap() == "sectora.cfg") {
+				if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_COLLECT_COINS_SECTORA")) {
+					Steam_SetAchievement("ACHIEVEMENT_COLLECT_COINS_SECTORA");
+				}
+			} else if (GetCurrentMap() == "sectorb.cfg") {
+				if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_COLLECT_COINS_SECTORB")) {
+					Steam_SetAchievement("ACHIEVEMENT_COLLECT_COINS_SECTORB");
+				}
+			} else if (GetCurrentMap() == "sectorc.cfg") {
+				if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_COLLECT_COINS_SECTORB")) {
+					Steam_SetAchievement("ACHIEVEMENT_COLLECT_COINS_SECTORB");
+				}
+			} else if (GetCurrentMap() == "bossfight.cfg") {
+				if (!Steam_IsAchievementUnlocked("ACHIEVEMENT_COLLECT_COINS_BOSSFIGHT")) {
+					Steam_SetAchievement("ACHIEVEMENT_COLLECT_COINS_BOSSFIGHT");
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 	
 	//Called when the entity gets spawned. The position in the map is passed as argument
 	void OnSpawn(const Vector& in vec)
@@ -64,6 +93,9 @@ class CWaveMonitor : IScriptedEntity
 		this.m_tmrMonitor.SetDelay(10000);
 		this.m_tmrMonitor.Reset();
 		this.m_tmrMonitor.SetActive(true);
+		this.m_tmrCoinWatch.SetDelay(2000);
+		this.m_tmrCoinWatch.Reset();
+		this.m_tmrCoinWatch.SetActive(false);
 		this.m_oModel.Alloc();
 	}
 	
@@ -83,9 +115,22 @@ class CWaveMonitor : IScriptedEntity
 				if (this.AllOpponentsDefeated()) {
 					this.m_tmrMonitor.SetActive(false);
 					Ent_SetGoalActivationStatus(true);
-					this.HandleAchievements();
+					this.HandleGoalAchievements();
 					TriggerGameSave();
+					this.m_tmrCoinWatch.Reset();
+					this.m_tmrCoinWatch.SetActive(true);
 					HUD_AddMessage(_("app.portal_now_open", "Portal is now open!"), HUD_MSG_COLOR_GREEN);
+				}
+			}
+		}
+
+		if (this.m_tmrCoinWatch.IsActive()) {
+			this.m_tmrCoinWatch.Update();
+			if (this.m_tmrCoinWatch.IsElapsed()) {
+				this.m_tmrCoinWatch.Reset();
+
+				if (this.HandleCoinAchievements()) {
+					this.m_tmrCoinWatch.SetActive(false);
 				}
 			}
 		}

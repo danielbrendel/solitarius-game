@@ -11,7 +11,6 @@
 	Released under the MIT license
 */
 
-string g_szPackagePath = "";
 const uint32 PLASMA_BALL_DAMAGE = 25;
 
 /* Plasma ball entity */
@@ -38,7 +37,7 @@ class CPlasmaBall : IScriptedEntity
 	{
 		this.m_vecPos = vec;
 		this.m_fRotation = 0.0f;
-		this.m_hSprite = R_LoadSprite(g_szPackagePath + "gfx\\plasmaball.png", 4, 64, 64, 4, false);
+		this.m_hSprite = R_LoadSprite(GetPackagePath() + "gfx\\plasmaball.png", 4, 64, 64, 4, false);
 		this.m_hHit = S_QuerySound(GetPackagePath() + "sound\\plasma_hit.wav");
 		this.m_tmrSpriteChange.SetDelay(50);
 		this.m_tmrSpriteChange.Reset();
@@ -198,8 +197,6 @@ class CPlasmaBall : IScriptedEntity
 
 void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent, const string &in szPath, const string &in szProps)
 {
-	g_szPackagePath = szPath;
-
 	CPlasmaBall @ball = CPlasmaBall();
 	Ent_SpawnEntity(szIdent, @ball, vecPos);
 }

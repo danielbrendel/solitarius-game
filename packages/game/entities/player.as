@@ -11,8 +11,6 @@
 	Released under the MIT license
 */
 
-string g_szPackagePath = "";
-
 #include "explosion.as"
 #include "weapon_gun.as"
 #include "weapon_laser.as"
@@ -475,7 +473,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 						
 						HUD_UpdateAmmoItem("gun", HUD_GetAmmoItemCurrent("gun") - 1, HUD_GetAmmoItemMax("gun"));
 						
-						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\gun.wav");
+						SoundHandle hSound = S_QuerySound(GetPackagePath() + "sound\\gun.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
 					}
 				} else if (this.m_iCurrentWeapon == WEAPON_LASER) {
@@ -499,7 +497,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 						
 						HUD_UpdateAmmoItem("laser", HUD_GetAmmoItemCurrent("laser") - 1, HUD_GetAmmoItemMax("laser"));
 						
-						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\laser.wav");
+						SoundHandle hSound = S_QuerySound(GetPackagePath() + "sound\\laser.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
 					}
 				} else if (this.m_iCurrentWeapon == WEAPON_MISSILE) {
@@ -511,7 +509,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 						
 						HUD_UpdateAmmoItem("missile", HUD_GetAmmoItemCurrent("missile") - 1, HUD_GetAmmoItemMax("missile"));
 						
-						SoundHandle hSound = S_QuerySound(g_szPackagePath + "sound\\missile_launch.wav");
+						SoundHandle hSound = S_QuerySound(GetPackagePath() + "sound\\missile_launch.wav");
 						S_PlaySound(hSound, S_GetCurrentVolume());
 					}
 				}
@@ -937,8 +935,6 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 //Create the associated entity here
 void CreateEntity(const Vector &in vecPos, float fRot, const string &in szIdent, const string &in szPath, const string &in szProps)
 {
-	g_szPackagePath = szPath;
-	
 	Ent_SetGoalActivationStatus(false);
 	
 	CPlayerEntity @player = CPlayerEntity();

@@ -120,9 +120,9 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 
 		array<string> dialog2;
 		dialog2.insertLast("This will not be easy, since before we can");
-		dialog2.insertLast("reach the boss via the portals we have to make ");
-		dialog2.insertLast("it through each infiltrated sector. There we ");
-		dialog2.insertLast("will face manyenemy ships.");
+		dialog2.insertLast("reach the boss via the portals we have to make");
+		dialog2.insertLast("it through each infiltrated sector. There we");
+		dialog2.insertLast("will face many enemy ships.");
 		dialog2.insertLast("");
 		dialog2.insertLast("But fear not: We are equipped with heavy weaponry,");
 		dialog2.insertLast("so at least we have a chance.");

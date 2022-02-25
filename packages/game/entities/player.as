@@ -166,9 +166,9 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	void LoadSectorBDialog()
 	{
 		array<string> dialog1;
-		dialog1.insertLast("Okay, so we have cleaned up the last sector.");
+		dialog1.insertLast("Okay, so we have cleaned up the previous sector.");
 		dialog1.insertLast("");
-		dialog1.insertLast("There are some too go tho.");
+		dialog1.insertLast("There are some to go tho.");
 		dialog1.insertLast("");
 		dialog1.insertLast("I sense that some enemy ships have direct impact weapons.");
 		dialog1.insertLast("You should not come too close to them, since they may inflict");

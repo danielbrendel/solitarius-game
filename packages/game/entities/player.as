@@ -226,7 +226,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog1.insertLast("");
 		dialog1.insertLast("We now need to gather all our strength and defeat it.");
 		dialog1.insertLast("");
-		dialog1.insertLast("If we don't defeat the boss, all our efforts where in vain,");
+		dialog1.insertLast("If we don't defeat the boss, all our efforts were in vain,");
 		dialog1.insertLast("because it then may breed more alien ships to plague the galaxy.");
 		dialog1.insertLast("");
 

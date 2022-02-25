@@ -21,7 +21,7 @@
 const int C_ALIENBOSS_REACT_RANGE = 695;
 const int C_ALIENBOSS_ATTACK_RANGE = 550;
 const float C_ALIENBOSS_DEFAULT_SPEED = 65.0;
-const int C_ALIENBOSS_MAX_HEALTH = 3000;
+const int C_ALIENBOSS_MAX_HEALTH = 5000;
 
 /* Alien boss entity */
 class CAlienBoss : IScriptedEntity

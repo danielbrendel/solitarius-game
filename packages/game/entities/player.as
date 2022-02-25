@@ -70,6 +70,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	bool m_bProcessOnce;
 	CInfoMenu m_oInfoMenu;
 	SpriteHandle m_hCursor;
+	bool m_bBossDefeatedDlgOpen;
 	
 	CPlayerEntity()
     {
@@ -85,8 +86,10 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		this.m_iScore = 0;
 		this.m_uiDodgeCounter = 0;
 		this.m_bProcessOnce = false;
+		this.m_bBossDefeatedDlgOpen = false;
 
 		CVar_Register("game_started", CVAR_TYPE_BOOL, "0");
+		CVar_Register("game_completed", CVAR_TYPE_BOOL, "0");
 
 		this.m_oInfoMenu = CInfoMenu();
     }
@@ -137,8 +140,6 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog3.insertLast("since they are armed, too. You can use dodging to");
 		dialog3.insertLast("evade their bullets. Keep in mind that some may have");
 		dialog3.insertLast("direct impact tho.");
-		dialog3.insertLast("");
-		
 
 		array<string> dialog4;
 		dialog4.insertLast("For bullets you should also use the shield protector");
@@ -147,13 +148,11 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog4.insertLast("You can collect items such as ship shield energy and ammo.");
 		dialog4.insertLast("You should also collect all the coins, since they will increase");
 		dialog4.insertLast("your ships shield health energy on each specific amount.");
-		dialog4.insertLast("");
 
 		array<string> dialog5;
 		dialog5.insertLast("I guess it is now up to you...");
 		dialog5.insertLast("");
 		dialog5.insertLast("Good luck, soldier!");
-		dialog5.insertLast("");
 
 		this.m_oInfoMenu.AddDialog(dialog1);
 		this.m_oInfoMenu.AddDialog(dialog2);
@@ -197,7 +196,6 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog1.insertLast("");
 		dialog1.insertLast("There are alien rotator ships in this sector which shoot");
 		dialog1.insertLast("multiple bullets at once. So beware of the upcoming bullet hell!");
-		dialog1.insertLast("");
 
 		array<string> dialog2;
 		dialog2.insertLast("I surely don't need to remind you of your ");
@@ -205,13 +203,11 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog2.insertLast("handy for any bullet hell situation.");
 		dialog2.insertLast("");
 		dialog2.insertLast("I am certain that you will manage to defeat the upcoming waves, too!");
-		dialog2.insertLast("");
 
 		array<string> dialog3;
 		dialog3.insertLast("We will talk again when you have reached the next station...");
 		dialog3.insertLast("");
 		dialog3.insertLast("Now, good luck, soldier!");
-		dialog3.insertLast("");
 
 		this.m_oInfoMenu.AddDialog(dialog1);
 		this.m_oInfoMenu.AddDialog(dialog2);
@@ -228,7 +224,6 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog1.insertLast("");
 		dialog1.insertLast("If we don't defeat the boss, all our efforts were in vain,");
 		dialog1.insertLast("because it then may breed more alien ships to plague the galaxy.");
-		dialog1.insertLast("");
 
 		array<string> dialog2;
 		dialog2.insertLast("So, gather your weapons and show this intruder our power.");
@@ -245,13 +240,47 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 		dialog3.insertLast("");
 		dialog3.insertLast("");
 		dialog3.insertLast("Good luck, soldier. The survivors of planet earth count on you!");
-		dialog3.insertLast("");
 
 		this.m_oInfoMenu.AddDialog(dialog1);
 		this.m_oInfoMenu.AddDialog(dialog2);
 		this.m_oInfoMenu.AddDialog(dialog3);
 	}
 	
+	//Load boss defeated dialog
+	void LoadBossDefeatedDialog()
+	{
+		this.m_oInfoMenu.Clear();
+
+		array<string> dialog1;
+		dialog1.insertLast("I can't believe it, but...!");
+		dialog1.insertLast("");
+		dialog1.insertLast("WE ARE VICTORIOUS!");
+		dialog1.insertLast("");
+		dialog1.insertLast("We have defeated the boss and its minions and thus the invasion is over.");
+		dialog1.insertLast("It was a wild and uncertain ride, but we finally won the battle of our lifes.");
+
+		array<string> dialog2;
+		dialog2.insertLast("Now we need to focus on rebuilding our civilization.");
+		dialog2.insertLast("");
+		dialog2.insertLast("This won't be easy, but I am sure we will manage that");
+		dialog2.insertLast("task, too. Well, as long as we all stand together.");
+		dialog2.insertLast("");
+		dialog2.insertLast("However, this is a different story.");
+		dialog2.insertLast("You can now travel back to earth using the portal.");
+
+		array<string> dialog3;
+		dialog3.insertLast("");
+		dialog3.insertLast("I just hope that we are safe from further invasions now...");
+
+		this.m_oInfoMenu.AddDialog(dialog1);
+		this.m_oInfoMenu.AddDialog(dialog2);
+		this.m_oInfoMenu.AddDialog(dialog3);
+
+		this.m_oInfoMenu.Start();
+
+		this.m_bBossDefeatedDlgOpen = true;
+	}
+
 	//Called when the entity gets spawned. The position in the map is passed as argument
 	void OnSpawn(const Vector& in vec)
 	{
@@ -318,6 +347,10 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 
 			this.m_oInfoMenu.SetPosition(Vector(Wnd_GetWindowCenterX() - 250, Wnd_GetWindowCenterY() - 250));
 			this.m_oInfoMenu.Start();
+		}
+
+		if ((CVar_GetBool("game_completed", false)) && (!this.m_bBossDefeatedDlgOpen)) {
+			this.LoadBossDefeatedDialog();
 		}
 
 		//Process game counter
@@ -710,7 +743,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 	//Called for key presses
 	void OnKeyPress(int vKey, bool bDown)
 	{
-		if (this.m_tmrGameCounter.IsActive()) {
+		if ((this.m_tmrGameCounter.IsActive()) || (this.m_oInfoMenu.IsActive())) {
 			return;
 		}
 		
@@ -828,7 +861,7 @@ class CPlayerEntity : IScriptedEntity, IPlayerEntity, ICollectingEntity
 			}
 		}
 
-		if (this.m_tmrGameCounter.IsActive()) {
+		if ((this.m_tmrGameCounter.IsActive()) || (this.m_oInfoMenu.IsActive())) {
 			return;
 		}
 

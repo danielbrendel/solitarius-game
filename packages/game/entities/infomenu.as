@@ -79,6 +79,12 @@ class CInfoMenu {
         this.m_bActive = false;
     }
 
+    //Clear dialogues
+    void Clear()
+    {
+        this.m_arrDialogs.resize(0);
+    }
+
     //Process menu
     void Process()
     {
